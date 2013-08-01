@@ -1,20 +1,19 @@
 var stream = require('stream');
 var crypto = require('crypto');
-var request = require('request');
 
-module.exports = function vkontakte(clientID, clientSecret) {
+module.exports = function vkontakte(request, clientID, clientSecret) {
   if (typeof clientID === 'undefined')
     throw new TypeError('Must specify either clientID/clientSecret pair or accessToken');
 
   if (typeof clientSecret !== 'undefined') {
-    return byApp(clientID, clientSecret);
+    return byApp(request, clientID, clientSecret);
   }
 
   var accessToken = clientID;
-  return byToken(accessToken);
+  return byToken(request, accessToken);
 };
 
-function byToken(accessToken) {
+function byToken(request, accessToken) {
   // authenticatedRequest(method, [params,] callback)
   return function authenticatedRequest(method, params, callback) {
     if (typeof params == 'function' || typeof params == 'undefined') {
@@ -31,7 +30,7 @@ function byToken(accessToken) {
   };
 }
 
-function byApp(clientID, clientSecret) {
+function byApp(request, clientID, clientSecret) {
   // signedRequest(method, [params, [httpMethod = 'GET',]] callback)
   return function signedRequest() {
     var _ref, _ref1;
@@ -41,7 +40,7 @@ function byApp(clientID, clientSecret) {
         params = (_ref = opt.shift()) != null ? _ref : {},
         httpMethod = (_ref1 = opt.shift()) != null ? _ref1 : 'GET';
 
-    params.v = '3.0';
+    params.v = '5.0';
     params.format = 'json';
     params.api_id = clientID;
     params.method = method;
