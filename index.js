@@ -22,6 +22,8 @@ function byToken(request, accessToken) {
     }
 
     params.access_token = accessToken;
+    params.param_v = params.v = '5.0';
+    params.format = 'json';
 
     return request({
       uri: 'https://api.vk.com/method/' + method,
@@ -40,7 +42,7 @@ function byApp(request, clientID, clientSecret) {
         params = (_ref = opt.shift()) != null ? _ref : {},
         httpMethod = (_ref1 = opt.shift()) != null ? _ref1 : 'GET';
 
-    params.v = '5.0';
+    params.param_v = params.v = '5.0';
     params.format = 'json';
     params.api_id = clientID;
     params.method = method;
