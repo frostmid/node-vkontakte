@@ -73,7 +73,16 @@ function byApp(request, clientID, clientSecret) {
 
 function handleResponse(cb) {
   if (typeof cb === 'undefined') return;
+  
   return function (err, resp, body) {
+    if (err) {
+      return cb(err);
+    }
+
+    if (!body) {
+      return cb('vk api returned empty result');
+    }
+
     try {
       var result = JSON.parse(body);
     } catch (e) {
